@@ -1,0 +1,8 @@
+group = 'com.gilgamesh.common'
+version = '0.0.1'
+
+dependencies {
+    implementation 'com.google.guava:guava:33.1.0-jre'
+    implementation 'org.apache.commons:commons-lang3:3.14.0'
+    implementation 'commons-io:commons-io:2.16.1'
+}

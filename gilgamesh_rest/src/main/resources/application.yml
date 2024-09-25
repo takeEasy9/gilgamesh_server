@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: gilgamesh_server
+  profiles:
+    active: dev

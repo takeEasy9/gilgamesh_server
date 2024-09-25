@@ -1,0 +1,69 @@
+server:
+  port: 8060
+spring:
+  web:
+    resources:
+      add-mappings: false
+  datasource:
+    druid:
+      mysql:
+        gilgamesh:
+          type: com.alibaba.druid.pool.DruidDataSource
+          driver-class-name: com.mysql.cj.jdbc.Driver
+          url: jdbc:mysql://192.168.96.233:3306/gilgamesh?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowMultiQueries=true&rewriteBatchedStatements=true
+          username: root
+          password: password
+          # 初始连接数
+          initialSize: 5
+          # 最小连接池数量
+          minIdle: 10
+          # 最大连接池数量
+          maxActive: 20
+          # 配置获取连接等待超时的时间
+          maxWait: 60000
+          # 配置连接超时时间
+          connectTimeout: 30000
+          # 配置网络超时时间
+          socketTimeout: 60000
+          # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+          timeBetweenEvictionRunsMillis: 60000
+          # 配置一个连接在池中最小生存的时间，单位是毫秒
+          minEvictableIdleTimeMillis: 300000
+          # 配置一个连接在池中最大生存的时间，单位是毫秒
+          maxEvictableIdleTimeMillis: 900000
+          # 配置检测连接是否有效
+          validationQuery: SELECT 1 FROM DUAL
+          validationQueryTimeout: 10000
+          poolPreparedStatements: false
+          testWhileIdle: true
+          testOnBorrow: false
+          testOnReturn: false
+          keepAlive: true
+          filters: stat,slf4j
+
+  data:
+    # redis
+    redis:
+      # 服务器地址
+      host: 192.168.96.233
+      # 服务器端口
+      port: 6379
+      # 数据库密码
+      password: password
+      # 数据库索引,默认为0
+      database: 0
+      client-type: lettuce
+      lettuce:
+        pool:
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1
+          max-active: 8
+        shutdown-timeout: 1200
+  threads:
+    virtual:
+      enabled: true
+
+
+
+

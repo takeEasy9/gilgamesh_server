@@ -1,0 +1,3 @@
+rootProject.name = 'gilgamesh_server'
+include('gilgamesh_rest', 'gilgamesh_common', 'gilgamesh_biz', 'gilgamesh_persistence')
+

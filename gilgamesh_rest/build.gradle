@@ -1,0 +1,8 @@
+group = 'com.gilgamesh.rest'
+version = '0.0.1'
+
+dependencies {
+	implementation(project(':gilgamesh_common'))
+	implementation(project(':gilgamesh_biz'))
+}
+
