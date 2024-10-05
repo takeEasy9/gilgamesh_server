@@ -1,5 +1,7 @@
 package com.gilgamesh.common.utils;
 
+import java.util.regex.Pattern;
+
 /**
  * @author takeEasy9
  * @version 1.0.0
@@ -23,4 +25,14 @@ public class ConstantUtil {
 
     // 空字符串
     public static final String STRING_EMPTY = "";
+
+    public static final String DEFAULT_VERSION = "1.0";
+
+    public static final String API_PREFIX = "/api/gilgamesh/";
+
+    public static final String API_VERSION_PLACEHOLDER = "{version}";
+
+    public static final Pattern API_VERSION_PREFIX_PATTERN = Pattern.compile(API_PREFIX + "v(\\d+\\.\\d+)");
+
+
 }

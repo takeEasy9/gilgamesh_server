@@ -1,10 +1,8 @@
 package com.gilgamesh.common.utils;
 
+import com.gilgamesh.common.entity.base.ApiResult;
+import com.gilgamesh.common.entity.base.BaseResult;
 import com.gilgamesh.common.enums.CodeMsg;
-import com.gilgamesh.common.enums.SystemEnums;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author takeEasy9
@@ -25,12 +23,8 @@ public class ResponseUtil {
      * @param data    Object 接口待返回数据
      * @return Mono<Map < String, Object>>
      */
-    public static Map<String, Object> success(CodeMsg codeMsg, Object data) {
-        Map<String, Object> resultMap = new HashMap<>(4);
-        resultMap.put(SystemEnums.ApiRes.CODE.getValue(), codeMsg.getCode());
-        resultMap.put(SystemEnums.ApiRes.MESSAGE.getValue(), codeMsg.getMsg());
-        resultMap.put(SystemEnums.ApiRes.DATA.getValue(), data);
-        return resultMap;
+    public static <T> ApiResult<T> success(CodeMsg codeMsg, T data) {
+        return new ApiResult<>(codeMsg, data);
     }
 
     /**
@@ -39,7 +33,7 @@ public class ResponseUtil {
      * @param codeMsg api消息编码与消息枚举值
      * @return Mono<Map < String, Object>>
      */
-    public static Map<String, Object> failed(CodeMsg codeMsg) {
+    public static BaseResult failed(CodeMsg codeMsg) {
         return failed(codeMsg.getCode(), codeMsg.getMsg());
     }
 
@@ -50,10 +44,7 @@ public class ResponseUtil {
      * @param msg  消息
      * @return Mono<Map < String, Object>>
      */
-    public static Map<String, Object> failed(String code, String msg) {
-        Map<String, Object> resultMap = new HashMap<>(2);
-        resultMap.put(SystemEnums.ApiRes.CODE.getValue(), code);
-        resultMap.put(SystemEnums.ApiRes.MESSAGE.getValue(), msg);
-        return resultMap;
+    public static BaseResult failed(String code, String msg) {
+        return new BaseResult(code, msg);
     }
 }

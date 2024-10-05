@@ -1,9 +1,16 @@
 server:
-  port: 8060
+  port: 8000
 spring:
   web:
     resources:
       add-mappings: false
+  jpa:
+    show-sql: true
+    format-sql: true
+    hibernate:
+      # 不会对数据库进行任何验证和操作
+      ddl-auto: none
+    open-in-view: false
   datasource:
     druid:
       mysql:
@@ -60,9 +67,22 @@ spring:
           max-wait: -1
           max-active: 8
         shutdown-timeout: 1200
-  threads:
-    virtual:
-      enabled: true
+springdoc:
+  api-docs:
+    # 是否开启接口文档
+    enabled: true
+    # OpenAPI文档的路径
+    path: /api-docs
+  swagger-ui:
+    # 是否开启 swagger ui
+    enabled: true
+    # swagger-ui路径
+    path: /swagger-ui.html
+    # 持久化认证数据
+    persistAuthorization: true
+  # 扫描包路径
+  packages-to-scan: com.gilgamesh.rest
+
 
 
 

@@ -1,5 +1,6 @@
 package com.gilgamesh.advice;
 
+import com.gilgamesh.common.entity.base.BaseResult;
 import com.gilgamesh.common.enums.BizCodeMsg;
 import com.gilgamesh.common.enums.SystemCodeMsg;
 import com.gilgamesh.common.enums.SystemEnums;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import java.sql.SQLException;
-import java.util.Map;
 
 /**
  * @author takeEasy9
@@ -32,15 +32,15 @@ import java.util.Map;
  * @since 1.0.0
  */
 @RestControllerAdvice
-public class RestControllerGlobalExceptionHandlerAdvice {
-    private final Logger logger = LoggerFactory.getLogger(RestControllerGlobalExceptionHandlerAdvice.class);
+public class RestControllerExceptionHandlerAdvice {
+    private final Logger logger = LoggerFactory.getLogger(RestControllerExceptionHandlerAdvice.class);
 
     /**
      * 当前运行环境
      */
     private final String activeProfile;
 
-    public RestControllerGlobalExceptionHandlerAdvice(@Value("${spring.profiles.active:Unknown}") String activeProfile) {
+    public RestControllerExceptionHandlerAdvice(@Value("${spring.profiles.active:Unknown}") String activeProfile) {
         this.activeProfile = activeProfile;
     }
 
@@ -52,7 +52,7 @@ public class RestControllerGlobalExceptionHandlerAdvice {
      */
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public Map<String, Object> noHandlerFoundExceptionHandler(NoHandlerFoundException e) {
+    public BaseResult noHandlerFoundExceptionHandler(NoHandlerFoundException e) {
         logger.error("<全局异常处理>: API NOT FOUND异常：", e);
         return ResponseUtil.failed(SystemCodeMsg.SYSTEM_HTTP_API_NOT_FOUND);
     }
@@ -65,7 +65,7 @@ public class RestControllerGlobalExceptionHandlerAdvice {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, Object> httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException e) {
+    public BaseResult httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException e) {
         logger.error("<全局异常处理>:HTTP消息转换异常：", e);
         return ResponseUtil.failed(SystemCodeMsg.SYSTEM_HTTP_API_NOT_FOUND);
     }
@@ -78,7 +78,7 @@ public class RestControllerGlobalExceptionHandlerAdvice {
      */
     @ExceptionHandler({MethodArgumentNotValidException.class, BindException.class, ConstraintViolationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, Object> bindExceptionHandler(BindException e) {
+    public BaseResult bindExceptionHandler(BindException e) {
         logger.error("<全局异常处理>:接口参数校验异常：", e);
         // 生产环境只返回入参无效这一信息
         if (SystemEnums.Profile.PRODUCT.getValue().equals(activeProfile)) {
@@ -100,7 +100,7 @@ public class RestControllerGlobalExceptionHandlerAdvice {
      */
     @ExceptionHandler({NullPointerException.class, IndexOutOfBoundsException.class, SQLException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Map<String, Object> exceptionHandler(NullPointerException e) {
+    public BaseResult exceptionHandler(NullPointerException e) {
         // 打印异常堆栈信息
         logger.error("<全局异常处理>:空指针异常：", e);
         return ResponseUtil.failed(BizCodeMsg.GUI_FAILED);
@@ -114,7 +114,7 @@ public class RestControllerGlobalExceptionHandlerAdvice {
      */
     @ExceptionHandler(BizException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Map<String, Object> businessExceptionHandler(BizException e) {
+    public BaseResult businessExceptionHandler(BizException e) {
         // 打印异常堆栈信息
         logger.error("<全局异常处理>: 自定义业务异常：", e);
         return ResponseUtil.failed(BizCodeMsg.GUI_FAILED);
@@ -128,7 +128,7 @@ public class RestControllerGlobalExceptionHandlerAdvice {
      */
     @ExceptionHandler(SystemException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Map<String, Object> businessExceptionHandler(SystemException e) {
+    public BaseResult businessExceptionHandler(SystemException e) {
         // 打印异常堆栈信息
         logger.error("<全局异常处理>: 自定义系统异常：", e);
         return ResponseUtil.failed(BizCodeMsg.GUI_FAILED);
@@ -142,7 +142,7 @@ public class RestControllerGlobalExceptionHandlerAdvice {
      */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public Map<String, Object> exceptionHandler(Exception e) {
+    public BaseResult exceptionHandler(Exception e) {
         // 打印异常堆栈信息
         logger.error("<全局异常处理>:其他异常：", e);
         return ResponseUtil.failed(BizCodeMsg.GUI_FAILED);

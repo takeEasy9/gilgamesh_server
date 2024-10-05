@@ -25,6 +25,16 @@ public class CollectionUtil {
     }
 
     /**
+     * 判断数组是否不为空
+     *
+     * @param array 数组
+     * @return True-不为空 False-为空
+     */
+    public static boolean isNotEmpty(Object[] array) {
+        return !isEmpty(array);
+    }
+
+    /**
      * 判断集合是否为空
      *
      * @param collection Collection<?>
@@ -35,6 +45,16 @@ public class CollectionUtil {
     }
 
     /**
+     * 判断集合是否不为空
+     *
+     * @param collection Collection<?>
+     * @return True-不为空 False-为空
+     */
+    public static boolean isNotEmpty(Collection<?> collection) {
+        return isEmpty(collection);
+    }
+
+    /**
      * 判断map是否为空
      *
      * @param map map
@@ -42,5 +62,15 @@ public class CollectionUtil {
      */
     public static boolean isEmpty(Map<?, ?> map) {
         return null == map || map.isEmpty();
+    }
+
+    /**
+     * 判断map是否不为空
+     *
+     * @param map map
+     * @return True-不为空 False-为空
+     */
+    public static boolean isNotEmpty(Map<?, ?> map) {
+        return !isEmpty(map);
     }
 }
