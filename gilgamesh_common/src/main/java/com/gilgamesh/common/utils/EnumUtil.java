@@ -1,7 +1,7 @@
 package com.gilgamesh.common.utils;
 
-import com.gilgamesh.common.enums.EnumValueLabel;
 import com.gilgamesh.common.enums.EnumValue;
+import com.gilgamesh.common.enums.EnumValueLabel;
 
 /**
  * @author takeEasy9
@@ -23,7 +23,7 @@ public class EnumUtil {
      * @return True-枚举值存在 False-枚举值不存在
      */
     public static <T> boolean isExist(EnumValue<T>[] enums, T value) {
-        if (CollectionUtil.isEmpty(enums) || null == value){
+        if (CollectionUtil.isEmpty(enums) || null == value) {
             return false;
         }
         for (EnumValue<T> e : enums) {
@@ -80,6 +80,36 @@ public class EnumUtil {
      */
     public static <E extends Enum<? extends EnumValue<T>>, T> boolean isNotExist(Class<E> enumClass, T value) {
         return !isExist(enumClass, value);
+    }
+
+    /**
+     * 判断枚举值是否不存与指定枚举类中
+     *
+     * @param enumClass Class<? extends Enum<? extends EnumValueLabel<?>>>
+     * @param value     String
+     * @return True-枚举值不存在 False-枚举值存在
+     */
+    public static boolean isExist(Class<? extends Enum<? extends EnumValueLabel<?>>> enumClass, String value) {
+        // 检查输入是否为null
+        if (enumClass == null || value == null) {
+            return false;
+        }
+        // 获取枚举类的所有实例
+        Enum<? extends EnumValueLabel<?>>[] enumConstants = enumClass.getEnumConstants();
+        // 遍历所有枚举实例
+        for (Enum<? extends EnumValueLabel<?>> enumConstant : enumConstants) {
+            // 获取当前枚举实例的值
+            EnumValueLabel<?> enumValueLabel = (EnumValueLabel<?>) enumConstant;
+            String currentValue = (String) enumValueLabel.getValue();
+
+            // 比较当前枚举实例的值与提供的值
+            if (value.equals(currentValue)) {
+                // 如果值匹配，则返回true
+                return true;
+            }
+        }
+        // 如果没有找到匹配的值，则返回false
+        return false;
     }
 
     /**

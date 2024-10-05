@@ -19,7 +19,9 @@ public enum BizCode implements Code {
 
     // 参数无效
     ACCESS_PARAMETER_INVALID("B0100"),
-    ;
+    DATE_CONVERT_FAILED("B0101"),
+    VALIDATION_CODE_GENERATE_SUCCESS("B0102"),
+    VALIDATION_CODE_GENERATE_FAILED("B0103");
     /**
      * 消息编码
      */
