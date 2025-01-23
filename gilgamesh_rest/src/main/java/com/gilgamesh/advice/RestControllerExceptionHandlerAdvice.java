@@ -4,7 +4,7 @@ import com.gilgamesh.common.entity.base.BaseResult;
 import com.gilgamesh.common.enums.BizCodeMsg;
 import com.gilgamesh.common.enums.SystemCodeMsg;
 import com.gilgamesh.common.enums.SystemEnums;
-import com.gilgamesh.common.exceptions.BizException;
+import com.gilgamesh.common.exceptions.BusinessException;
 import com.gilgamesh.common.exceptions.SystemException;
 import com.gilgamesh.common.utils.ResponseUtil;
 import com.gilgamesh.common.utils.StringUtil;
@@ -112,9 +112,9 @@ public class RestControllerExceptionHandlerAdvice {
      * @param e BusinessException
      * @return Mono<Map < String, Object>>
      */
-    @ExceptionHandler(BizException.class)
+    @ExceptionHandler(BusinessException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public BaseResult businessExceptionHandler(BizException e) {
+    public BaseResult businessExceptionHandler(BusinessException e) {
         // 打印异常堆栈信息
         logger.error("<全局异常处理>: 自定义业务异常：", e);
         return ResponseUtil.failed(BizCodeMsg.GUI_FAILED);

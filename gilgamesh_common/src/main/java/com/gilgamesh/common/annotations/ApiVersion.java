@@ -17,6 +17,11 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD, ElementType.TYPE})
 public @interface ApiVersion {
-    // 默认接口版本号1.0开始
-    String value() default ConstantUtil.DEFAULT_VERSION;
+
+    /**
+     * api 版本号, 默认接口版本号v1, 用于接口版本管理, 方法级别优先级高于类级别
+     *
+     * @return String
+     */
+    String value() default ConstantUtil.DEFAULT_API_VERSION;
 }

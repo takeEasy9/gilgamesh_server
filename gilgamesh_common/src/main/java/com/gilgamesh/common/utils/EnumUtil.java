@@ -120,7 +120,7 @@ public class EnumUtil {
      * @param <T>   枚举值类型
      * @return 枚举名称
      */
-    public static <T> String getNameByValue(EnumValueLabel<T>[] enums, T value) {
+    public static <T> String getLabelByValue(EnumValueLabel<T>[] enums, T value) {
         if (value == null) {
             return null;
         }
@@ -136,16 +136,16 @@ public class EnumUtil {
      * 根据枚举名称获取对应的枚举值
      *
      * @param enums 枚举列表
-     * @param name  枚举名称
+     * @param label 枚举label
      * @param <T>   枚举值类型
      * @return 枚举值
      */
-    public static <T> T getValueByName(EnumValueLabel<T>[] enums, String name) {
-        if (StringUtil.isEmpty(name)) {
+    public static <T> T getValueByLabel(EnumValueLabel<T>[] enums, String label) {
+        if (StringUtil.isEmpty(label)) {
             return null;
         }
         for (EnumValueLabel<T> e : enums) {
-            if (name.equals(e.getLabel())) {
+            if (label.equals(e.getLabel())) {
                 return e.getValue();
             }
         }

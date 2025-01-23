@@ -29,13 +29,8 @@ public class SystemEnums {
         }
 
         @Override
-        public String getValue() {
-            return this.value;
-        }
-
-        @Override
-        public String getLabel() {
-            return this.label;
+        public ApiRes self() {
+            return this;
         }
     }
 
@@ -83,13 +78,8 @@ public class SystemEnums {
         }
 
         @Override
-        public String getValue() {
-            return this.value;
-        }
-
-        @Override
-        public String getLabel() {
-            return this.label;
+        public ZoneIdType self() {
+            return this;
         }
     }
 
@@ -109,16 +99,12 @@ public class SystemEnums {
         Profile(String value, String label) {
             this.value = value;
             this.label = label;
+            addEnumValueLabel(value, label);
         }
 
         @Override
-        public String getValue() {
-            return this.value;
-        }
-
-        @Override
-        public String getLabel() {
-            return this.label;
+        public Profile self() {
+            return this;
         }
     }
 }

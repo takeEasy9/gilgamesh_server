@@ -25,7 +25,7 @@ allprojects {
         mavenCentral()
     }
     java {
-        sourceCompatibility = '17'
+        sourceCompatibility = '21'
     }
 
     tasks.withType(JavaCompile).tap {
@@ -41,7 +41,8 @@ subprojects {
         implementation 'org.springframework.boot:spring-boot-starter-webflux'
         implementation 'org.springframework.boot:spring-boot-starter-aop'
         implementation 'org.springframework.boot:spring-boot-starter-validation'
-        implementation 'org.springframework.boot:spring-boot-starter-data-redis:3.2.5'
+        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
         implementation 'org.apache.commons:commons-pool2:2.12.0'
         implementation 'com.mysql:mysql-connector-j:8.4.0'
         implementation 'com.alibaba:druid-spring-boot-starter:1.2.22'

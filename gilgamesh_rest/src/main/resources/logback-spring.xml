@@ -2,9 +2,9 @@
 
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
     <!-- 定义日志文件名称 -->
-    <property name="crawler" value="crawler1.0"/>
+    <property name="gilgamesh" value="gilgamesh1.0"/>
     <!-- 定义日志文件 输出位置 -->
-    <property name="logPath" value="log" />
+    <property name="logPath" value="logs"/>
     <!-- 日志最大的历史 9 天 -->
     <property name="maxHistory" value="9"/>
 
@@ -67,8 +67,8 @@
     <!-- 根节点，表示基本的日志级别，里面可以由多个appender规则 -->
     <!-- level="debug"代表基础日志级别为 debug -->
     <root level="info">
-        <appender-ref ref="consoleLog" />
-        <appender-ref ref="fileInfoLog" />
-        <appender-ref ref="fileErrorLog" />
+        <appender-ref ref="consoleLog"/>
+        <appender-ref ref="fileInfoLog"/>
+        <appender-ref ref="fileErrorLog"/>
     </root>
 </configuration>

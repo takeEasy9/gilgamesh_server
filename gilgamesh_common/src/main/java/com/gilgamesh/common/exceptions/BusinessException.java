@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @createDate 2024/5/2 16:25
  * @since 1.0.0
  */
-public class BizException extends RuntimeException implements Serializable {
+public class BusinessException extends RuntimeException implements Serializable {
     @Serial
     private static final long serialVersionUID = 4015687047944726552L;
 
@@ -26,12 +26,12 @@ public class BizException extends RuntimeException implements Serializable {
      */
     private final String msg;
 
-    public BizException(String code, String msg) {
+    public BusinessException(String code, String msg) {
         this.code = code;
         this.msg = msg;
     }
 
-    public BizException(CodeMsg codeMsg) {
+    public BusinessException(CodeMsg codeMsg) {
         this.code = codeMsg.getCode();
         this.msg = codeMsg.getMsg();
     }

@@ -14,6 +14,13 @@ public class ConstantUtil {
     }
 
     /**
+     * ********************************  常用字符  *************************************
+     */
+    public static final String SPECIAL_CHARACTER_EMPTY = "";
+    public static final String SPECIAL_CHARACTER_HYPHEN = "-";
+
+
+    /**
      * ********************************  常用时间格式处理  *************************************
      */
     public static final String DATE_TIME_FORMAT_GENERAL = "yyyy-MM-dd HH:mm:ss";
@@ -26,13 +33,13 @@ public class ConstantUtil {
     // 空字符串
     public static final String STRING_EMPTY = "";
 
-    public static final String DEFAULT_VERSION = "1.0";
+    public static final String DEFAULT_API_VERSION = "v1";
 
     public static final String API_PREFIX = "/api/gilgamesh/";
 
     public static final String API_VERSION_PLACEHOLDER = "{version}";
 
-    public static final Pattern API_VERSION_PREFIX_PATTERN = Pattern.compile(API_PREFIX + "v(\\d+\\.\\d+)");
+    public static final Pattern API_VERSION_PREFIX_PATTERN = Pattern.compile(API_PREFIX + "(v\\d)");
 
 
 }

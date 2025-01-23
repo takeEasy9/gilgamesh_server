@@ -4,14 +4,13 @@ import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.CircleCaptcha;
 import com.gilgamesh.biz.entity.dto.CaptchaDTO;
 import com.gilgamesh.common.enums.BizCodeMsg;
-import com.gilgamesh.common.exceptions.BizException;
+import com.gilgamesh.common.exceptions.BusinessException;
 import com.gilgamesh.common.redis.RedisService;
 import com.gilgamesh.common.utils.StringUtil;
+import com.gilgamesh.common.utils.UUIDUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.UUID;
 
 /**
  * @author takeEasy9
@@ -38,16 +37,16 @@ public class UserIdentifyService {
      *
      * @return CaptchaDTO
      */
-    public CaptchaDTO genImageCaptcha() {
+    public CaptchaDTO genImageCaptcha(Integer width, Integer height) {
         // 使用uuid作为captchaKey
-        String captchaKey = UUID.randomUUID().toString();
-        CircleCaptcha captcha = CaptchaUtil.createCircleCaptcha(200, 100, 4, 20);
+        String captchaKey = UUIDUtil.genUUIDWithoutHyphen();
+        CircleCaptcha captcha = CaptchaUtil.createCircleCaptcha(width, height, 4, 20);
         String captchaCode = captcha.getCode();
-        if (StringUtil.isNotEmpty(captchaCode) && redisService.setValue(captchaKey, captcha.getCode(), 5 * 60)) {
+        if (StringUtil.isNotEmpty(captchaCode) && redisService.setValue(captchaKey, captcha.getCode(), 300L)) {
             return new CaptchaDTO(captchaKey, captcha.getImageBase64());
         } else {
             logger.error("生成图片验证码失败: 验证码:{}为空或验证码key写入缓存失败", captchaCode);
-            throw new BizException(BizCodeMsg.VALIDATION_CODE_GENERATE_FAILED);
+            throw new BusinessException(BizCodeMsg.VALIDATION_CODE_GENERATE_FAILED);
         }
     }
 }

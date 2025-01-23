@@ -25,6 +25,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,30 +66,39 @@ public class SpringDocSwagger3Configuration {
         return openApi -> {
             Map<String, Map<RequestMethod, HandlerMethod>> originalUrlMethodHandlerMethodMap = getOriginalUrlMethodHandlerMethodMap(handlerMapping);
             Paths oldPaths = openApi.getPaths();
-            Map<String, Map<RequestMethod, PathItem>> originalUrlMethodPathItemMap = getOriginalUrlMethodPathItemMap(oldPaths);
             Paths newPaths = new Paths();
-            originalUrlMethodPathItemMap.forEach((originalUrl, requestMethodPathItemMap) -> {
-                requestMethodPathItemMap.forEach(((requestMethod, pathItem) -> {
-                    if (originalUrlMethodHandlerMethodMap.containsKey(originalUrl) && originalUrlMethodHandlerMethodMap.get(originalUrl).containsKey(requestMethod)) {
-                        HandlerMethod handlerMethod = originalUrlMethodHandlerMethodMap.get(originalUrl).get(requestMethod);
-                        // 优先获取方法上的版本注解, 方法上的版本注解不存在, 从controller上获取
-                        ApiVersion apiVersion = AnnotationUtils.findAnnotation(handlerMethod.getMethod(), ApiVersion.class) != null ? AnnotationUtils.findAnnotation(handlerMethod.getMethod(), ApiVersion.class) : AnnotationUtils.findAnnotation(handlerMethod.getBeanType(), ApiVersion.class);
-                        String version;
-                        if (apiVersion == null) {
-                            logger.error("api {} not annotated with apiVersion", originalUrl);
-                            version = ConstantUtil.DEFAULT_VERSION;
-                        } else {
-                            version = apiVersion.value();
-                        }
-                        String newUrl = originalUrl.replace(ConstantUtil.API_VERSION_PLACEHOLDER, "v" + version);
-                        if (!newPaths.containsKey(newUrl)) {
-                            newPaths.addPathItem(newUrl, pathItem);
-                        }
+            oldPaths.forEach((path, pathItem) -> pathItem.readOperationsMap().forEach(((httpMethod, operation) -> {
+                RequestMethod requestMethod = RequestMethod.resolve(httpMethod.name());
+                if (originalUrlMethodHandlerMethodMap.containsKey(path) && originalUrlMethodHandlerMethodMap.get(path).containsKey(requestMethod)) {
+                    HandlerMethod handlerMethod = originalUrlMethodHandlerMethodMap.get(path).get(requestMethod);
+                    // 优先获取方法上的版本注解, 方法上的版本注解不存在, 从controller上获取
+                    ApiVersion apiVersion = AnnotationUtils.findAnnotation(handlerMethod.getMethod(), ApiVersion.class) != null ? AnnotationUtils.findAnnotation(handlerMethod.getMethod(), ApiVersion.class) : AnnotationUtils.findAnnotation(handlerMethod.getBeanType(), ApiVersion.class);
+                    String version;
+                    if (apiVersion == null) {
+                        logger.error("api {} not annotated with apiVersion", path);
+                        version = ConstantUtil.DEFAULT_API_VERSION;
                     } else {
-                        logger.error("openapi {}-{} not found in handlerMapping", requestMethod, originalUrl);
+                        version = apiVersion.value();
                     }
-                }));
-            });
+                    String newUrl = path.replace(ConstantUtil.API_VERSION_PLACEHOLDER, version);
+                    if (newPaths.containsKey(newUrl)) {
+                        newPaths.get(newUrl).operation(httpMethod, operation);
+                    } else {
+                        // 从原有的pathItem中复制属性
+                        PathItem newPathItem = new PathItem();
+                        newPathItem.setSummary(pathItem.getSummary());
+                        newPathItem.setDescription(pathItem.getDescription());
+                        newPathItem.operation(httpMethod, operation);
+                        newPathItem.setServers(pathItem.getServers());
+                        newPathItem.setParameters(pathItem.getParameters());
+                        newPathItem.setExtensions(pathItem.getExtensions());
+                        newPaths.addPathItem(newUrl, newPathItem);
+                    }
+
+                } else {
+                    logger.error("openapi {}-{} not found in handlerMapping", requestMethod, path);
+                }
+            })));
             openApi.setPaths(newPaths);
         };
     }
@@ -100,7 +110,7 @@ public class SpringDocSwagger3Configuration {
      * @return Map<String, Map < RequestMethod, HandlerMethod>>
      */
     private Map<String, Map<RequestMethod, HandlerMethod>> getOriginalUrlMethodHandlerMethodMap(RequestMappingHandlerMapping handlerMapping) {
-        Map<String, Map<RequestMethod, HandlerMethod>> originalUrlMethodHandlerMethodMap = new HashMap<>(16);
+        Map<String, Map<RequestMethod, HandlerMethod>> originalUrlMethodHandlerMethodMap = new HashMap<>();
         for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : handlerMapping.getHandlerMethods().entrySet()) {
             RequestMappingInfo requestMappingInfo = entry.getKey();
             HandlerMethod handlerMethod = entry.getValue();
@@ -111,7 +121,7 @@ public class SpringDocSwagger3Configuration {
                     if (originalUrlMethodHandlerMethodMap.containsKey(originalUrl)) {
                         originalUrlMethodHandlerMethodMap.get(originalUrl).put(requestMethod, handlerMethod);
                     } else {
-                        Map<RequestMethod, HandlerMethod> requestMethodHandlerMethodMap = new HashMap<>(16);
+                        EnumMap<RequestMethod, HandlerMethod> requestMethodHandlerMethodMap = new EnumMap<>(RequestMethod.class);
                         requestMethodHandlerMethodMap.put(requestMethod, handlerMethod);
                         originalUrlMethodHandlerMethodMap.put(originalUrl, requestMethodHandlerMethodMap);
                     }
@@ -119,36 +129,5 @@ public class SpringDocSwagger3Configuration {
             }
         }
         return originalUrlMethodHandlerMethodMap;
-    }
-
-    /**
-     * 获取接口原始url与请求方法, PathItem映射
-     *
-     * @param oldPaths Paths
-     * @return Map<String, Map < RequestMethod, PathItem>>
-     */
-    private Map<String, Map<RequestMethod, PathItem>> getOriginalUrlMethodPathItemMap(Paths oldPaths) {
-        Map<String, Map<RequestMethod, PathItem>> originalUrlMethodPathItemMap = new HashMap<>(16);
-        oldPaths.forEach((originalUrl, pathItem) -> {
-            pathItem.readOperationsMap().forEach(((httpMethod, operation) -> {
-                RequestMethod requestMethod = RequestMethod.resolve(httpMethod.name());
-                // 从原有的pathItem中复制属性
-                PathItem newPathItem = new PathItem();
-                newPathItem.setSummary(pathItem.getSummary());
-                newPathItem.setDescription(pathItem.getDescription());
-                newPathItem.operation(httpMethod, operation);
-                newPathItem.setServers(pathItem.getServers());
-                newPathItem.setParameters(pathItem.getParameters());
-                newPathItem.setExtensions(pathItem.getExtensions());
-                if (originalUrlMethodPathItemMap.containsKey(originalUrl)) {
-                    originalUrlMethodPathItemMap.get(originalUrl).put(requestMethod, newPathItem);
-                } else {
-                    Map<RequestMethod, PathItem> requestMethodPathItemMap = new HashMap<>(16);
-                    requestMethodPathItemMap.put(requestMethod, newPathItem);
-                    originalUrlMethodPathItemMap.put(originalUrl, requestMethodPathItemMap);
-                }
-            }));
-        });
-        return originalUrlMethodPathItemMap;
     }
 }

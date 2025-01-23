@@ -1,7 +1,7 @@
 package com.gilgamesh.common.utils;
 
 import com.gilgamesh.common.enums.BizCodeMsg;
-import com.gilgamesh.common.exceptions.BizException;
+import com.gilgamesh.common.exceptions.BusinessException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -154,11 +154,11 @@ public class TimeUtil {
      * @param str2           String 日期2
      * @param dateTimeFormat String 日期格式
      * @return int <0: 日期1 < 日期2; 0: 日期1 = 日期2; >0: 日期1 > 日期2
-     * @throws BizException 自定义异常
+     * @throws BusinessException 自定义异常
      */
-    public static int dateCompare(String str1, String str2, String dateTimeFormat) throws BizException {
+    public static int dateCompare(String str1, String str2, String dateTimeFormat) throws BusinessException {
         if (StringUtil.isEmpty(str1) || StringUtil.isEmpty(str2)) {
-            throw new BizException(BizCodeMsg.DATE_CONVERT_FAILED);
+            throw new BusinessException(BizCodeMsg.DATE_CONVERT_FAILED);
         }
         try {
             LocalDate date1 = stringToLocalDate(str1, dateTimeFormat);
@@ -168,7 +168,7 @@ public class TimeUtil {
         // 异常
         catch (Exception e) {
             LOGGER.error("error message: 日期比较异常,原因是:", e);
-            throw new BizException(BizCodeMsg.DATE_CONVERT_FAILED);
+            throw new BusinessException(BizCodeMsg.DATE_CONVERT_FAILED);
         }
     }
 
@@ -178,15 +178,15 @@ public class TimeUtil {
      * @param str        Date
      * @param dateFormat String
      * @return String
-     * @throws BizException 自定义异常
+     * @throws BusinessException 自定义异常
      */
-    public static LocalDate stringToLocalDate(String str, String dateFormat) throws BizException {
+    public static LocalDate stringToLocalDate(String str, String dateFormat) throws BusinessException {
         try {
             DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFormat);
             return LocalDate.parse(str, dateTimeFormatter);
         } catch (Exception e) {
             LOGGER.error("error message: String 格式日期 <{}> 转换为 LocalDate 格式 <{}> 日期时间异常,原因是:", str, dateFormat, e);
-            throw new BizException(BizCodeMsg.DATE_CONVERT_FAILED);
+            throw new BusinessException(BizCodeMsg.DATE_CONVERT_FAILED);
         }
     }
 }

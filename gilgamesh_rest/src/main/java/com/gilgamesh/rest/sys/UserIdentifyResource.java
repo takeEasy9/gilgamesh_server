@@ -6,6 +6,7 @@ import com.gilgamesh.common.annotations.ApiCodeMsg;
 import com.gilgamesh.common.annotations.ApiVersion;
 import com.gilgamesh.common.enums.BizCodeMsg;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -25,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @ApiVersion
 @RestController
-@RequestMapping("/api/gilgamesh/{version}/identify")
+@RequestMapping("/api/gilgamesh/{version}/login")
 @Tag(name = "用户认证")
 public class UserIdentifyResource {
     private final Logger logger = LoggerFactory.getLogger(UserIdentifyResource.class);
@@ -45,15 +47,17 @@ public class UserIdentifyResource {
      * @return CaptchaDTO
      */
     @ApiCodeMsg(BizCodeMsg.VALIDATION_CODE_GENERATE_SUCCESS)
-    @GetMapping("/imageCaptcha")
+    @GetMapping("/image-captcha")
     @Operation(method = "GET", summary = "生成图片验证码",
             responses = {
                     @ApiResponse(description = "请求成功",
                             content = @Content(mediaType = "application/json",
                                     schema = @Schema(implementation = CaptchaDTO.class)),
                             responseCode = "200"),})
-    public CaptchaDTO genImageCaptcha() {
+    public CaptchaDTO genImageCaptcha(@Parameter(description = "图片宽度, 单位: px, 默认200px")
+                                      @RequestParam(value = "width", required = false, defaultValue = "200") Integer width,
+                                      @Parameter(description = "图片高度, 单位: px, 默认100px") @RequestParam(value = "height", required = false, defaultValue = "100") Integer height) {
         logger.info("开始生成图片验证码...");
-        return userIdentifyService.genImageCaptcha();
+        return userIdentifyService.genImageCaptcha(width, height);
     }
 }
