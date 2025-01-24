@@ -67,7 +67,7 @@ spring:
           max-wait: -1
           max-active: 8
         shutdown-timeout: 1200
-springdoc:
+spring-doc:
   api-docs:
     # 是否开启接口文档
     enabled: true

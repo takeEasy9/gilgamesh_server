@@ -107,4 +107,27 @@ public class SystemEnums {
             return this;
         }
     }
+
+    /**
+     * 逻辑删除状态
+     */
+    public enum DeletedStatus implements EnumValueLabel<String> {
+        // 未删除
+        NOT_DELETED("1", "未删除"),
+        // 已删除
+        DELETED("2", "已删除");
+
+        private final String value;
+        private final String label;
+
+        DeletedStatus(String value, String label) {
+            this.value = value;
+            this.label = label;
+        }
+
+        @Override
+        public DeletedStatus self() {
+            return this;
+        }
+    }
 }

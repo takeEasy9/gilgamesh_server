@@ -9,7 +9,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 /**
  * @author takeEasy9
  * @version 1.0.0
- * @description webmvc 配置
+ * @description web mvc 配置
  * @createDate 2024/10/2 22:34
  * @since 1.0.0
  */

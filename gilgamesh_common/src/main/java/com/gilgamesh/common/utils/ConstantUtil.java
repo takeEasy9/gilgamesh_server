@@ -41,5 +41,14 @@ public class ConstantUtil {
 
     public static final Pattern API_VERSION_PREFIX_PATTERN = Pattern.compile(API_PREFIX + "(v\\d)");
 
+    /**
+     * 常用的http请求方法
+     */
+    public static final String HTTP_METHOD_GET = "GET";
+    public static final String HTTP_METHOD_POST = "POST";
+    public static final String HTTP_METHOD_PUT = "PUT";
+    public static final String HTTP_METHOD_DELETE = "DELETE";
+    public static final String HTTP_METHOD_PATCH = "PATCH";
+
 
 }
