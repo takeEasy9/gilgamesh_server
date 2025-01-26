@@ -11,12 +11,12 @@ import java.time.Instant;
 /**
  * @author takeEasy9
  * @version 1.0.0
- * @description
+ * @description 系统用户 entity
  * @createDate 2025/1/23 16:45
  * @since 1.0.0
  */
 @Entity
-@Table(schema = "test", name = "sys_user")
+@Table(schema = "gilgamesh", name = "sys_user")
 public class SysUser extends VersionControlGenericBaseEntity {
     @Serial
     private static final long serialVersionUID = -1865544633199071594L;

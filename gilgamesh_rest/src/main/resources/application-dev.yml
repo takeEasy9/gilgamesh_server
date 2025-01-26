@@ -82,6 +82,30 @@ spring-doc:
     persistAuthorization: true
   # 扫描包路径
   packages-to-scan: com.gilgamesh.rest
+web:
+  security:
+    captcha:
+      expire-in-seconds: 180
+    jwt:
+      header: Authorization
+      refresh-token-header: RefreshToken
+      # 加密密钥
+      base64-secret: LhX
+      # 30分钟 = 1800s
+      token-expire-in-seconds: 604800
+      # 24 * 7 小时 = 604800s
+      token-expire-in-seconds-for-remember-me: 604800
+      # 缓存延期时间,默认15分钟 = 900s
+      cache-extend-in-seconds: 900
+      # 缓存过期前的 n 分钟内用户仍在操作,目前 n 默认取值为 3 分钟 = 180s
+      token-cache-remain-in-seconds: 180
+      token-head: "Bearer "
+    interceptor:
+      white-list: [ api/gilgamesh/v1/login, /api/verifyCode/captcha, /index.html, /api-docs/**, /swagger-ui/** ]
+      login-api: 'api/gilgamesh/v1/login'
+    policy:
+      content-security-policy: "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.google-analytics.com; font-src 'self' data:"
+      web-feature-policy: "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'self'; payment 'none'"
 
 
 
