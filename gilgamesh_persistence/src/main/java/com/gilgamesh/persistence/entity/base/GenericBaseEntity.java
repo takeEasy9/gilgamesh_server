@@ -15,7 +15,7 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 @MappedSuperclass
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class GenericBaseEntity extends AuditingEntity implements Serializable, LogicallyDeleted {
     @Serial
     private static final long serialVersionUID = -601344038396753516L;
@@ -24,7 +24,7 @@ public class GenericBaseEntity extends AuditingEntity implements Serializable, L
      * 物理编码, 自增长
      */
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**

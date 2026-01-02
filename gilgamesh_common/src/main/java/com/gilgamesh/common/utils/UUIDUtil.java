@@ -1,6 +1,6 @@
 package com.gilgamesh.common.utils;
 
-import java.util.UUID;
+import com.github.f4b6a3.uuid.UuidCreator;
 
 /**
  * @author takeEasy9
@@ -18,8 +18,8 @@ public class UUIDUtil {
      *
      * @return String
      */
-    public static String genUUID() {
-        return UUID.randomUUID().toString();
+    public static String genUuidV7() {
+        return UuidCreator.getTimeOrderedEpochPlus1().toString();
     }
 
     /**
@@ -27,8 +27,8 @@ public class UUIDUtil {
      *
      * @return String
      */
-    public static String genUUIDWithoutHyphen() {
-        return UUID.randomUUID().toString()
+    public static String genUuidV7WithoutHyphen() {
+        return UuidCreator.getTimeOrderedEpochPlus1().toString()
                 .replace(ConstantUtil.SPECIAL_CHARACTER_HYPHEN, ConstantUtil.SPECIAL_CHARACTER_EMPTY);
     }
 }

@@ -1,4 +1,4 @@
-package com.gilgamesh.persistence.repository.gilgamesh;
+package com.gilgamesh.persistence.repository.mysql.gilgamesh;
 
 import com.gilgamesh.persistence.entity.gilgamesh.sys.SysRole;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -35,4 +35,12 @@ public interface SysRoleRepository extends JpaRepository<SysRole, Long> {
      * @return List<SysRole>
      */
     List<SysRole> findByIdInAndDeletedStatus(Collection<Long> ids, String deletedStatus);
+
+    /**
+     * 通过[逻辑删除状态, 逻辑删除状态作为查询条件]查询数据
+     *
+     * @param deletedStatus String
+     * @return List<SysRole>
+     */
+    List<SysRole> findByDeletedStatus(String deletedStatus);
 }

@@ -4,6 +4,8 @@ import com.gilgamesh.persistence.entity.base.VersionControlGenericBaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.io.Serial;
 import java.time.Instant;
@@ -17,9 +19,18 @@ import java.time.Instant;
  */
 @Entity
 @Table(schema = "gilgamesh", name = "sys_user")
+@DynamicInsert
+@DynamicUpdate
 public class SysUser extends VersionControlGenericBaseEntity {
     @Serial
     private static final long serialVersionUID = -1865544633199071594L;
+
+    /**
+     * 用户ID
+     */
+    @Column(name = "user_id", nullable = false)
+    private String userId;
+
     /**
      * 用户登录名
      */
@@ -97,6 +108,14 @@ public class SysUser extends VersionControlGenericBaseEntity {
      */
     @Column(name = "user_status", nullable = false)
     private String userStatus;
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getUserName() {
         return userName;
@@ -206,6 +225,7 @@ public class SysUser extends VersionControlGenericBaseEntity {
     public String toString() {
         return "SysUser{" +
                 "super=" + super.toString() +
+                "userId='" + userId + '\'' +
                 "userName='" + userName + '\'' +
                 ", userAlias='" + userAlias + '\'' +
                 ", userEmail='" + userEmail + '\'' +

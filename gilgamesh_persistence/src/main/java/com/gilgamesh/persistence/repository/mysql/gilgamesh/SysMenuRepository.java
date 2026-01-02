@@ -1,4 +1,4 @@
-package com.gilgamesh.persistence.repository.gilgamesh;
+package com.gilgamesh.persistence.repository.mysql.gilgamesh;
 
 
 import com.gilgamesh.persistence.entity.gilgamesh.sys.SysMenu;
@@ -58,20 +58,20 @@ public interface SysMenuRepository extends JpaRepository<SysMenu, Long> {
     /**
      * 通过[菜单英文名称, 逻辑删除状态, 逻辑删除状态作为查询条件]查询数据
      *
-     * @param menuEnglishName String 菜单英文名称
-     * @param deletedStatus   String 逻辑删除状态, 1-未删除, 2-已删除
+     * @param menuEnName    String 菜单英文名称
+     * @param deletedStatus String 逻辑删除状态, 1-未删除, 2-已删除
      * @return SysMenu
      */
-    SysMenu findByMenuEnglishNameAndDeletedStatus(String menuEnglishName, String deletedStatus);
+    SysMenu findByMenuEnNameAndDeletedStatus(String menuEnName, String deletedStatus);
 
     /**
      * 通过[菜单英文名称集合, 逻辑删除状态, 逻辑删除状态作为查询条件]查询数据
      *
-     * @param menuEnglishNames Collection<String> 菜单英文名称集合
-     * @param deletedStatus    String 逻辑删除状态, 1-未删除, 2-已删除
+     * @param menuEnNames   Collection<String> 菜单英文名称集合
+     * @param deletedStatus String 逻辑删除状态, 1-未删除, 2-已删除
      * @return List<SysMenu>
      */
-    List<SysMenu> findByMenuEnglishNameInAndDeletedStatus(Collection<String> menuEnglishNames, String deletedStatus);
+    List<SysMenu> findByMenuEnNameInAndDeletedStatus(Collection<String> menuEnNames, String deletedStatus);
 
     /**
      * 通过[菜单导航路径, 逻辑删除状态, 逻辑删除状态作为查询条件]查询数据

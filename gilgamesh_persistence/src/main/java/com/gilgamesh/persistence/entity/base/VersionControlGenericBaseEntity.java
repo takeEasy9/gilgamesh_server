@@ -1,8 +1,6 @@
 package com.gilgamesh.persistence.entity.base;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Inheritance;
-import jakarta.persistence.InheritanceType;
 import jakarta.persistence.MappedSuperclass;
 
 import java.io.Serial;
@@ -15,7 +13,7 @@ import java.io.Serial;
  * @since 1.0.0
  */
 @MappedSuperclass
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class VersionControlGenericBaseEntity extends GenericBaseEntity {
     @Serial
     private static final long serialVersionUID = 2244481482793303492L;

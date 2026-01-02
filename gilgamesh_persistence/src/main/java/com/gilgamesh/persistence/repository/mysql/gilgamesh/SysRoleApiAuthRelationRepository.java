@@ -1,23 +1,21 @@
-package com.gilgamesh.persistence.repository.gilgamesh;
-
+package com.gilgamesh.persistence.repository.mysql.gilgamesh;
 
 import com.gilgamesh.persistence.entity.gilgamesh.sys.SysRoleApiAuthRelation;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.List;
 
-
 /**
  * @author takeEasy9
  * @version 1.0.0
  * @description 角色与接口权限关联关系
- * @createDate 2025/1/26 16:28
+ * @createDate 2025/2/16 16:57
  * @since 1.0.0
  */
 @Repository
-public interface SysRoleApiAuthRelationRepository extends JpaRepository<SysRoleApiAuthRelation, Long> {
+public interface SysRoleApiAuthRelationRepository extends CrudRepository<SysRoleApiAuthRelation, Long> {
 
     /**
      * 通过[物理编码, 逻辑删除状态, 逻辑删除状态作为查询条件]查询数据
@@ -36,4 +34,13 @@ public interface SysRoleApiAuthRelationRepository extends JpaRepository<SysRoleA
      * @return List<SysRoleApiAuthRelation>
      */
     List<SysRoleApiAuthRelation> findByIdInAndDeletedStatus(Collection<Long> ids, String deletedStatus);
+
+    /**
+     * 通过[角色编码集合, 逻辑删除状态, 逻辑删除状态作为查询条件]查询数据
+     *
+     * @param roleIds       Collection<Long>
+     * @param deletedStatus String
+     * @return List<SysRoleApiAuthRelation>
+     */
+    List<SysRoleApiAuthRelation> findByRoleIdInAndDeletedStatus(Collection<Long> roleIds, String deletedStatus);
 }

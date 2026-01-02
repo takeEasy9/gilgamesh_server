@@ -31,7 +31,7 @@ import java.util.Objects;
 @EnableJpaRepositories(
         entityManagerFactoryRef = "mysqlGilgameshEntityManagerFactory",
         transactionManagerRef = "mySqlGilgameshTransactionManager",
-        basePackages = {"com.gilgamesh.persistence.repository.gilgamesh"})
+        basePackages = {"com.gilgamesh.persistence.repository.mysql.gilgamesh"})
 public class MySqlGilgameshConfiguration {
     @Autowired
     private JpaProperties jpaProperties;
@@ -53,7 +53,7 @@ public class MySqlGilgameshConfiguration {
         return entityManagerFactoryBuilder
                 .dataSource(mysqlGilgameshDataSource)
                 .properties(getProperties())
-                .packages("com.gilgamesh.persistence.domain.gilgamesh")
+                .packages("com.gilgamesh.persistence.entity.gilgamesh")
                 .persistenceUnit("mysqlGilgameshPersistenceUnit")
                 .build();
     }

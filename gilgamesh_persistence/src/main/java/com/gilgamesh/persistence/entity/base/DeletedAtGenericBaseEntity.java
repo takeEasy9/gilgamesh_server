@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @since 1.0.0
  */
 @MappedSuperclass
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
+//@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class DeletedAtGenericBaseEntity extends AuditingEntity implements Serializable, LogicallyDeleted {
     @Serial
     private static final long serialVersionUID = 6146274678016331531L;

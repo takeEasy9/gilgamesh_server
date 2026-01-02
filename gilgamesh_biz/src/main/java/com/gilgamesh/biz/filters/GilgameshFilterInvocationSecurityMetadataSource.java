@@ -1,8 +1,8 @@
 package com.gilgamesh.biz.filters;
 
-import com.gilgamesh.persistence.repository.gilgamesh.SysApiAuthRepository;
-import com.gilgamesh.persistence.repository.gilgamesh.SysRoleApiAuthRelationRepository;
-import com.gilgamesh.persistence.repository.gilgamesh.SysRoleRepository;
+import com.gilgamesh.persistence.repository.mysql.gilgamesh.SysApiAuthRepository;
+import com.gilgamesh.persistence.repository.mysql.gilgamesh.SysRoleApiAuthRelationRepository;
+import com.gilgamesh.persistence.repository.mysql.gilgamesh.SysRoleRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.ConfigAttribute;

@@ -6,10 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -188,5 +191,9 @@ public class TimeUtil {
             LOGGER.error("error message: String 格式日期 <{}> 转换为 LocalDate 格式 <{}> 日期时间异常,原因是:", str, dateFormat, e);
             throw new BusinessException(BizCodeMsg.DATE_CONVERT_FAILED);
         }
+    }
+
+    public static Date localDateTimeDate(LocalDateTime localDateTime) {
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
 }

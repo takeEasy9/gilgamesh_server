@@ -1,4 +1,4 @@
-package com.gilgamesh.persistence.repository.gilgamesh;
+package com.gilgamesh.persistence.repository.mysql.gilgamesh;
 
 import com.gilgamesh.persistence.entity.gilgamesh.sys.SysApiAuth;
 import org.springframework.data.jpa.repository.JpaRepository;

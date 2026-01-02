@@ -1,6 +1,6 @@
 package com.gilgamesh.advice;
 
-import com.gilgamesh.common.entity.base.BaseResult;
+import com.gilgamesh.common.entity.base.ApiResult;
 import com.gilgamesh.common.enums.BizCodeMsg;
 import com.gilgamesh.common.enums.SystemCodeMsg;
 import com.gilgamesh.common.enums.SystemEnums;
@@ -52,7 +52,8 @@ public class RestControllerExceptionHandlerAdvice {
      */
     @ExceptionHandler(NoHandlerFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public BaseResult noHandlerFoundExceptionHandler(NoHandlerFoundException e) {
+    @SuppressWarnings("rawtypes")
+    public ApiResult noHandlerFoundExceptionHandler(NoHandlerFoundException e) {
         logger.error("<全局异常处理>: API NOT FOUND异常：", e);
         return ResponseUtil.failed(SystemCodeMsg.SYSTEM_HTTP_API_NOT_FOUND);
     }
@@ -65,7 +66,8 @@ public class RestControllerExceptionHandlerAdvice {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public BaseResult httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException e) {
+    @SuppressWarnings("rawtypes")
+    public ApiResult httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException e) {
         logger.error("<全局异常处理>:HTTP消息转换异常：", e);
         return ResponseUtil.failed(SystemCodeMsg.SYSTEM_HTTP_API_NOT_FOUND);
     }
@@ -78,7 +80,8 @@ public class RestControllerExceptionHandlerAdvice {
      */
     @ExceptionHandler({MethodArgumentNotValidException.class, BindException.class, ConstraintViolationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public BaseResult bindExceptionHandler(BindException e) {
+    @SuppressWarnings("rawtypes")
+    public ApiResult bindExceptionHandler(BindException e) {
         logger.error("<全局异常处理>:接口参数校验异常：", e);
         // 生产环境只返回入参无效这一信息
         if (SystemEnums.Profile.PRODUCT.getValue().equals(activeProfile)) {
@@ -100,7 +103,8 @@ public class RestControllerExceptionHandlerAdvice {
      */
     @ExceptionHandler({NullPointerException.class, IndexOutOfBoundsException.class, SQLException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public BaseResult exceptionHandler(NullPointerException e) {
+    @SuppressWarnings("rawtypes")
+    public ApiResult exceptionHandler(NullPointerException e) {
         // 打印异常堆栈信息
         logger.error("<全局异常处理>:空指针异常：", e);
         return ResponseUtil.failed(BizCodeMsg.GUI_FAILED);
@@ -114,10 +118,11 @@ public class RestControllerExceptionHandlerAdvice {
      */
     @ExceptionHandler(BusinessException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public BaseResult businessExceptionHandler(BusinessException e) {
+    @SuppressWarnings("rawtypes")
+    public ApiResult businessExceptionHandler(BusinessException e) {
         // 打印异常堆栈信息
         logger.error("<全局异常处理>: 自定义业务异常：", e);
-        return ResponseUtil.failed(BizCodeMsg.GUI_FAILED);
+        return ResponseUtil.failed(e.getCode(), e.getMsg());
     }
 
     /**
@@ -128,7 +133,8 @@ public class RestControllerExceptionHandlerAdvice {
      */
     @ExceptionHandler(SystemException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public BaseResult businessExceptionHandler(SystemException e) {
+    @SuppressWarnings("rawtypes")
+    public ApiResult businessExceptionHandler(SystemException e) {
         // 打印异常堆栈信息
         logger.error("<全局异常处理>: 自定义系统异常：", e);
         return ResponseUtil.failed(BizCodeMsg.GUI_FAILED);
@@ -142,7 +148,8 @@ public class RestControllerExceptionHandlerAdvice {
      */
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public BaseResult exceptionHandler(Exception e) {
+    @SuppressWarnings("rawtypes")
+    public ApiResult exceptionHandler(Exception e) {
         // 打印异常堆栈信息
         logger.error("<全局异常处理>:其他异常：", e);
         return ResponseUtil.failed(BizCodeMsg.GUI_FAILED);
