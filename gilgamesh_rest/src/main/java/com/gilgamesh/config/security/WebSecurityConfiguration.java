@@ -3,7 +3,7 @@ package com.gilgamesh.config.security;
 import com.gilgamesh.biz.service.security.ApiAuthorizationManager;
 import com.gilgamesh.biz.service.security.JwtAccessDeniedHandler;
 import com.gilgamesh.biz.service.security.JwtAuthenticationEntryPoint;
-import com.gilgamesh.common.entity.property.InterceptorProperty;
+import com.gilgamesh.common.entity.property.WebFilterProperty;
 import com.gilgamesh.common.entity.property.WebSecurityPolicy;
 import com.gilgamesh.common.enums.SystemEnums;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,12 +58,17 @@ public class WebSecurityConfiguration {
     /**
      * web 拦截器配置
      */
-    private final InterceptorProperty interceptorProperty;
+    private final WebFilterProperty webFilterProperty;
 
     /**
      * 用户详情服务
      */
     private final UserDetailsService userDetailsService;
+
+    /**
+     * 验证码过滤器
+     */
+    private final CaptchaFilter captchaFilter;
 
     /**
      * token 过滤器
@@ -87,16 +92,17 @@ public class WebSecurityConfiguration {
 
     @Autowired
     public WebSecurityConfiguration(AuthenticationConfiguration authenticationConfiguration, WebSecurityPolicy webSecurityPolicy,
-                                    InterceptorProperty interceptorProperty,
-                                    @Qualifier("userDetailsService") UserDetailsService userDetailsService,
+                                    WebFilterProperty webFilterProperty,
+                                    @Qualifier("userDetailsService") UserDetailsService userDetailsService, CaptchaFilter captchaFilter,
                                     JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter,
                                     @Qualifier("jwtAuthenticationEntryPoint") JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
                                     @Qualifier("jwtAccessDeniedHandler") JwtAccessDeniedHandler jwtAccessDeniedHandler,
                                     ApiAuthorizationManager apiAuthorizationManager) {
         this.authenticationConfiguration = authenticationConfiguration;
         this.webSecurityPolicy = webSecurityPolicy;
-        this.interceptorProperty = interceptorProperty;
+        this.webFilterProperty = webFilterProperty;
         this.userDetailsService = userDetailsService;
+        this.captchaFilter = captchaFilter;
         this.jwtAuthenticationTokenFilter = jwtAuthenticationTokenFilter;
         this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
@@ -122,7 +128,7 @@ public class WebSecurityConfiguration {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authorizeRequests -> {
                     // 资源访问白名单
-                    authorizeRequests.requestMatchers(interceptorProperty.getWhiteList().toArray(String[]::new)).permitAll()
+                    authorizeRequests.requestMatchers(webFilterProperty.getWhiteList().toArray(String[]::new)).permitAll()
                             .anyRequest()
                             .access(AuthorizationManagers.allOf(
                                     // 内置的「已认证」授权管理器
@@ -136,6 +142,7 @@ public class WebSecurityConfiguration {
                         .accessDeniedHandler(jwtAccessDeniedHandler))
                 .authenticationManager(this.authenticationManager(authenticationConfiguration))
                 .authenticationProvider(this.authenticationProvider())
+                .addFilterBefore(captchaFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

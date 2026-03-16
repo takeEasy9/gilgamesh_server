@@ -211,5 +211,7 @@ public class ConstantUtil {
 
     public static final String HTTP_HEADER_TOKEN_TYPE_BEARER = "Bearer";
 
+    public static final int DATA_COUNT = 1;
+
 
 }

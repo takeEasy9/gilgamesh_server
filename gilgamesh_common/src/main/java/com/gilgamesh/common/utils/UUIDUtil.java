@@ -31,4 +31,8 @@ public class UUIDUtil {
         return UuidCreator.getTimeOrderedEpochPlus1().toString()
                 .replace(ConstantUtil.SPECIAL_CHARACTER_HYPHEN, ConstantUtil.SPECIAL_CHARACTER_EMPTY);
     }
+
+    public static void main(String[] args) {
+        System.out.println(genUuidV7WithoutHyphen());
+    }
 }

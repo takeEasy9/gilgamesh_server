@@ -330,6 +330,7 @@ public class JwtService {
             String userId = claims.getSubject();
             GilgameshUserDetail jwtUserDetail = new GilgameshUserDetail();
             jwtUserDetail.setUserId(userId);
+            jwtUserDetail.setUsername(userId);
             return jwtUserDetail;
         } catch (Exception e) {
             logger.error("accessToken解析中发生了错误,原因:", e);

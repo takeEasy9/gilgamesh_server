@@ -1,7 +1,7 @@
 package com.gilgamesh.config.security;
 
 import com.gilgamesh.biz.service.security.JwtService;
-import com.gilgamesh.common.entity.property.InterceptorProperty;
+import com.gilgamesh.common.entity.property.WebFilterProperty;
 import com.gilgamesh.common.enums.BizCodeMsg;
 import com.gilgamesh.common.enums.SystemEnums;
 import com.gilgamesh.common.utils.ConstantUtil;
@@ -46,7 +46,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     /**
      * web 拦截器配置
      */
-    private final InterceptorProperty interceptorProperty;
+    private final WebFilterProperty webFilterProperty;
 
     /**
      * JWT服务类
@@ -59,8 +59,8 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
 
     @Autowired
-    public JwtAuthenticationTokenFilter(InterceptorProperty interceptorProperty, JwtService jwtService, @Qualifier("userDetailsService") UserDetailsService userDetailsService) {
-        this.interceptorProperty = interceptorProperty;
+    public JwtAuthenticationTokenFilter(WebFilterProperty webFilterProperty, JwtService jwtService, @Qualifier("userDetailsService") UserDetailsService userDetailsService) {
+        this.webFilterProperty = webFilterProperty;
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
     }
@@ -70,9 +70,9 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         String requestUri = URL_PATH_HELPER.getPathWithinApplication(request);
         logger.info("当前请求资源：<{}>", requestUri);
         // 1. 白名单路径直接放行（优化：用 UrlPathHelper 统一路径匹配，避免 servletPath 遗漏上下文）
-        if (interceptorProperty.getWhiteList().stream().anyMatch(whitePath ->
+        if (webFilterProperty.getWhiteList().stream().anyMatch(whitePath ->
                 URL_PATH_HELPER.getPathWithinApplication(request).matches(normalizeWhitePath(whitePath)))) {
-            logger.info("白名单场景，无需认证：<{}>", requestUri);
+            logger.debug("白名单场景，无需认证：<{}>", requestUri);
             filterChain.doFilter(request, response);
             return;
         }
@@ -109,7 +109,6 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
             ResponseUtil.setResponse(response, HttpStatus.UNAUTHORIZED.value(), BizCodeMsg.AUTH_ACCESS_TOKEN_INVALID);
             return;
         }
-
         // 5. 安全上下文处理（优化：避免重复认证、校验用户有效性）
         if (SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails dbUserDetails = userDetailsService.loadUserByUsername(jwtUserDetail.getUsername());

@@ -77,4 +77,6 @@ public class RedisCacheConfiguration {
         // 使用 Jackson2JsonRedisSerialize 替换默认JDK序列化
         return new Jackson2JsonRedisSerializer<>(objectMapper, Object.class);
     }
+
+
 }

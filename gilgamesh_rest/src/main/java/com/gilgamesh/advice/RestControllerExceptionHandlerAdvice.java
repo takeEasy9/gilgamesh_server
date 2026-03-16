@@ -121,7 +121,7 @@ public class RestControllerExceptionHandlerAdvice {
     @SuppressWarnings("rawtypes")
     public ApiResult businessExceptionHandler(BusinessException e) {
         // 打印异常堆栈信息
-        logger.error("<全局异常处理>: 自定义业务异常：", e);
+        logger.error("<全局异常处理>: 自定义业务异常：{}", e.getMessage());
         return ResponseUtil.failed(e.getCode(), e.getMsg());
     }
 

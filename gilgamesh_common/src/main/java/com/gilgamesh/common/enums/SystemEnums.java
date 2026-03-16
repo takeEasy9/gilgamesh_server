@@ -181,6 +181,8 @@ public class SystemEnums {
         CLIENT_TYPE_ANDROID("4", "Android"),
         // 桌面
         CLIENT_TYPE_DESKTOP("5", "桌面"),
+        // 桌面
+        CLIENT_TYPE_UNKNOWN("6", "未知"),
         ;
 
         private final String value;

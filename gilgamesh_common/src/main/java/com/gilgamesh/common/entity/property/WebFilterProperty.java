@@ -13,8 +13,8 @@ import java.util.Set;
  * @since 1.0.0
  */
 @Component
-@ConfigurationProperties(prefix = "web.security.interceptor")
-public class InterceptorProperty {
+@ConfigurationProperties(prefix = "web.security.filter")
+public class WebFilterProperty {
     /**
      * 请求白名单
      */
@@ -24,6 +24,11 @@ public class InterceptorProperty {
      * 登录接口
      */
     private String loginApi;
+
+    /**
+     * 请求体最大长度限制, 单位字节
+     */
+    private int loginMaxRequestBodySize = 1024;
 
     public Set<String> getWhiteList() {
         return whiteList;
@@ -41,11 +46,20 @@ public class InterceptorProperty {
         this.loginApi = loginApi;
     }
 
+    public int getLoginMaxRequestBodySize() {
+        return loginMaxRequestBodySize;
+    }
+
+    public void setLoginMaxRequestBodySize(int loginMaxRequestBodySize) {
+        this.loginMaxRequestBodySize = loginMaxRequestBodySize;
+    }
+
     @Override
     public String toString() {
         return "InterceptorProperty{" +
                 "whiteList=" + whiteList +
                 ", loginApi='" + loginApi + '\'' +
+                ", loginMaxRequestBodySize=" + loginMaxRequestBodySize +
                 '}';
     }
 }

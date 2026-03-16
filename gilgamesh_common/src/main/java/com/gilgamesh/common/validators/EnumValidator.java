@@ -1,6 +1,6 @@
 package com.gilgamesh.common.validators;
 
-import com.gilgamesh.common.annotations.NotExist;
+import com.gilgamesh.common.annotations.ValidateEnum;
 import com.gilgamesh.common.enums.EnumValueLabel;
 import com.gilgamesh.common.utils.EnumUtil;
 import com.gilgamesh.common.utils.StringUtil;
@@ -18,9 +18,9 @@ import java.util.stream.Stream;
  * @createDate 2024/10/5 12:04
  * @since 1.0.0
  */
-public class EnumNotExistValidator implements ConstraintValidator<NotExist, String> {
+public class EnumValidator implements ConstraintValidator<ValidateEnum, String> {
 
-    private NotExist notExist;
+    private ValidateEnum validateEnum;
 
     /**
      * 初始化方法
@@ -28,8 +28,8 @@ public class EnumNotExistValidator implements ConstraintValidator<NotExist, Stri
      * @param notExist NotExist 注解
      */
     @Override
-    public void initialize(NotExist notExist) {
-        this.notExist = notExist;
+    public void initialize(ValidateEnum notExist) {
+        this.validateEnum = notExist;
     }
 
     /**
@@ -42,19 +42,19 @@ public class EnumNotExistValidator implements ConstraintValidator<NotExist, Stri
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
 
-        boolean skipIfEmpty = notExist.skipIfEmpty();
+        boolean skipIfEmpty = validateEnum.skipIfEmpty();
         // 如果为空，直接返回true
         if (skipIfEmpty && StringUtil.isEmpty(value)) {
             return true;
         }
-        NotExist.EnumValidateType enumValidateType = notExist.enumValidateType();
+        ValidateEnum.EnumValidationRule enumValidateType = validateEnum.enumValidationRule();
         // 在全部枚举值中，校验是否存在
-        if (enumValidateType == NotExist.EnumValidateType.ALL) {
-            Class<? extends Enum<? extends EnumValueLabel<?>>> enumClass = notExist.enumClass();
+        if (enumValidateType == ValidateEnum.EnumValidationRule.FULL_MATCH) {
+            Class<? extends Enum<? extends EnumValueLabel<?>>> enumClass = validateEnum.enumClass();
             return EnumUtil.isExist(enumClass, value);
-        } else if (enumValidateType == NotExist.EnumValidateType.PARTIAL) {
+        } else if (enumValidateType == ValidateEnum.EnumValidationRule.SPECIFIC_VALUES_ONLY) {
             // 在指定的枚举中，校验是否存在
-            Set<String> values = Stream.of(notExist.values()).collect(Collectors.toSet());
+            Set<String> values = Stream.of(validateEnum.specificValues()).collect(Collectors.toSet());
             return values.contains(value);
         } else {
             // 暂不支持的枚举校验类型

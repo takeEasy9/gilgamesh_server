@@ -86,6 +86,7 @@ public class UserIdentifyService {
     public ResponseEntity<ApiResult<CaptchaDTO>> genImageCaptcha(Integer width, Integer height) {
         // 使用uuid作为captchaKey
         String captchaKey = UUIDUtil.genUuidV7WithoutHyphen();
+//        StringUtils.isEmpty(captchaKey)
         CircleCaptcha captcha = CaptchaUtil.createCircleCaptcha(width, height, 4, 20);
         String captchaCode = captcha.getCode();
         if (StringUtil.isNotEmpty(captchaCode) && redisService.setValue(captchaKey, captcha.getCode(), 300L)) {
@@ -106,12 +107,6 @@ public class UserIdentifyService {
     @Transactional(transactionManager = "mySqlGilgameshTransactionManager", rollbackFor = Exception.class)
     public ResponseEntity<ApiResult<LoginDTO>> login(LoginVO loginVO) {
         this.logger.info("用户 <{}> 开始登录", loginVO);
-        // 校验验证码
-        String verifyCode = (String) redisService.getValue(loginVO.getVerifyKey());
-        if (StringUtil.isEmpty(verifyCode) || !verifyCode.equalsIgnoreCase(loginVO.getVerifyCode())) {
-            this.logger.error("<{}> 验证码错误或验证码已过期", loginVO.getVerifyKey());
-            throw new BusinessException(BizCodeMsg.VALIDATION_CODE_VERIFY_FAILED);
-        }
         try {
             // 构造认证令牌（用户名+明文密码）
             UsernamePasswordAuthenticationToken authToken =
@@ -126,7 +121,7 @@ public class UserIdentifyService {
             // 生成 JWT token
             TokenDTO tokenDTO = jwtService.generateToken(jti, loginVO.getClientType(), userDetail);
             int count = this.sysUserRepository.updateLastLoginAtByUsername(userDetail.getUsername(), Instant.now());
-            if (count == 1) {
+            if (count == ConstantUtil.DATA_COUNT) {
                 this.logger.info("成功更新该用户 <{}> 的最后登录时间", loginVO.getUsername());
             } else {
                 this.logger.error("更新该用户 <{}> 的最后登录时间失败", loginVO.getUsername());
@@ -146,13 +141,13 @@ public class UserIdentifyService {
             this.logger.error(String.valueOf(e));
             throw new BusinessException(BizCodeMsg.USER_LOGIN_FAILED_WITH_NAME_PASSWORD);
         } catch (DisabledException e) {
-            this.logger.error("用户 <{}> 账号尚未激活,请先激活、原因:", loginVO.getUsername(), e);
+            this.logger.error("用户 <{}> 账号尚未激活,请先激活,原因:", loginVO.getUsername(), e);
             throw new BusinessException(BizCodeMsg.USER_LOGIN_ACCOUNT_INACTIVE);
         } catch (LockedException e) {
-            this.logger.error("用户 <{}> 账号已被锁定,请先解锁、原因:", loginVO.getUsername(), e);
+            this.logger.error("用户 <{}> 账号已被锁定,请先解锁,原因:", loginVO.getUsername(), e);
             throw new BusinessException(BizCodeMsg.USER_LOGIN_ACCOUNT_FORBIDDEN);
         } catch (CredentialsExpiredException e) {
-            this.logger.error("用户 <{}> 账号密码过期,请重置密码、原因:", loginVO.getUsername(), e);
+            this.logger.error("用户 <{}> 账号密码过期,请重置密码, 原因:", loginVO.getUsername(), e);
             throw new BusinessException(BizCodeMsg.USER_LOGIN_PASSWORD_EXPIRED);
         } catch (AccountExpiredException e) {
             this.logger.error("用户 <{}> 账号已注销,请联系管理员解决、原因:", loginVO.getUsername(), e);

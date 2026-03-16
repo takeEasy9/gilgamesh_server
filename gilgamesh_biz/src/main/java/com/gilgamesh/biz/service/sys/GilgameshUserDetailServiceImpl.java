@@ -76,7 +76,7 @@ public class GilgameshUserDetailServiceImpl implements UserDetailsService {
     /**
      * 根据用户名加载用户详情
      *
-     * @param username 用户名
+     * @param username 用户名, 可以是用户名、手机号、邮箱
      * @return UserDetails 用户详情
      * @throws UsernameNotFoundException 用户名未找到异常
      */
@@ -163,7 +163,7 @@ public class GilgameshUserDetailServiceImpl implements UserDetailsService {
                 case GilgameshEnums.UserStatus.USER_STATUS_NORMAL:
                     break;
                 // 账户锁定
-                case GilgameshEnums.UserStatus.USER_STATUS_LOCKED:
+                case GilgameshEnums.UserStatus.USER_STATUS_TEMP_LOCKED:
                     accountNonLocked = false;
                     break;
                 // 密码过期

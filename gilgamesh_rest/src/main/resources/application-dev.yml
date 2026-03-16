@@ -115,10 +115,10 @@ web:
       at-expire-threshold-ms: 60000
       # refresh token 续期阈值(毫秒) 3分钟
       rt-expire-threshold-ms: 180000
-
-    interceptor:
+    filter:
       white-list: [ /static/**, /api/gilgamesh/v1/login, /api/verifyCode/captcha, /api/gilgamesh/v1/image/captcha, /index.html, /api-docs, /api-docs/**, /swagger-ui/** ]
       login-api: '/api/gilgamesh/v1/login'
+      login-max-request-body-size: 8192 # 请求体最大大小,防止恶意大请求，单位：字节
     policy:
       content-security-policy: "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://www.google-analytics.com; font-src 'self' data:"
       web-feature-policy: "geolocation 'none'; midi 'none'; sync-xhr 'none'; microphone 'none'; camera 'none'; magnetometer 'none'; gyroscope 'none'; fullscreen 'self'; payment 'none'"
@@ -153,7 +153,7 @@ rest-client:
       max-conn-total: 200        # 最大总连接数
       max-conn-per-route: 50     # 单路由最大连接数
       connection-wait-queue-length: 100 # 连接池等待队列长度
-      idle-conn-evict-min: 5     # 空闲连接清理间隔（分钟）
+      idle-conn-evict-min: 1     # 空闲连接清理间隔（分钟）
       conn-validate-after-inactivity-sec: 30 # 空闲连接校验（秒）
     # 超时配置
     timeout:

@@ -94,10 +94,6 @@ public class UserAuthResource {
             logger.error("用户名或密码为空,请重试");
             throw new BusinessException(BizCodeMsg.ACCESS_PARAM_INVALID);
         }
-        if (StringUtil.isEmpty(loginVO.getVerifyCode()) || StringUtil.isEmpty(loginVO.getVerifyKey())) {
-            logger.error("登录验证码参数无效,请检查");
-            throw new BusinessException(BizCodeMsg.ACCESS_PARAM_INVALID);
-        }
         String clientType = ServletRequestUtils.getStringParameter(request, ConstantUtil.HTTP_HEADER_CLIENT_TYPE, SystemEnums.ClientType.CLIENT_TYPE_WEB.getValue());
         logger.info("用户 {} 登录客户端类型: {}", loginVO.getUsername(), clientType);
         loginVO.setClientType(clientType);
